@@ -1,20 +1,20 @@
-jest.mock("axios", () => {
-  return {
-    get: jest.fn().mockReturnValue({
-      data: {
-        cep: "03183-001",
-        uf: "SP",
-      },
-    }),
-  };
-});
-
 const getAddress = require("./getAddress");
 
 describe("verifica se o CEP é do estado informado", () => {
+  jest.mock("axios", () => {
+    return {
+      get: jest.fn().mockReturnValue({
+        data: {
+          cep: "03183-001",
+          uf: "SP",
+        },
+      }),
+    };
+  });
+
   it("testa de CEP e estado corretos", async () => {
     const postalCode = "03183-001";
-    const address = await getAddress(postalCode, "VIACEP", "SP");
+    const address = await getAddress(postalCode, "SP", "VIACEP");
     expect(address).toHaveProperty("cep", postalCode);
   });
   it("mock da função", async () => {
@@ -26,20 +26,20 @@ describe("verifica se o CEP é do estado informado", () => {
     //   .fn()
     //   .mockImplementation(() => Promise.resolve(response))
     const getAddress = jest.fn().mockResolvedValue(response);
-    const address = await getAddress(postalCode, enpointKey, state);
+    const address = await getAddress(postalCode, state, enpointKey);
     expect(getAddress).toHaveBeenCalled();
-    expect(getAddress).toHaveBeenCalledWith(postalCode, enpointKey, state);
+    expect(getAddress).toHaveBeenCalledWith(postalCode, state, enpointKey);
     expect(getAddress).toHaveReturned();
-    await expect(getAddress(postalCode, enpointKey, state)).resolves.toBe(
+    await expect(getAddress(postalCode, state, enpointKey)).resolves.toBe(
       response
     );
   });
 });
 
-describe.skip("consultando CEPs usando API do ViaCEP", () => {
+describe("consultando CEPs usando API do ViaCEP", () => {
   it("busca o endereço a partir de um CEP válido", async () => {
     const postalCode = "03183-001";
-    const address = await getAddress(postalCode, "VIACEP");
+    const address = await getAddress(postalCode, "SP", "VIACEP");
     expect(address).toHaveProperty("cep", postalCode);
     expect(address.cep).toEqual(postalCode);
     expect.assertions(2);
@@ -47,10 +47,11 @@ describe.skip("consultando CEPs usando API do ViaCEP", () => {
 
   it("tenta buscar o endereço a partir de um CEP inválido", async () => {
     const postalCode = "000";
-    const address = await getAddress(postalCode, "VIACEP");
+    const address = await getAddress(postalCode, "SP", "VIACEP");
+    console.log(address);
     expect(address).not.toHaveProperty("cep");
     expect(address).toHaveProperty("errorMessage");
-    expect(address.errorMessage).toContain("not found");
+    expect(address.errorMessage).toContain("code 400");
     expect.assertions(3);
   });
 });
