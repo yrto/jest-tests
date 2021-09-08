@@ -26,7 +26,8 @@ describe("verifica se o CEP é do estado informado", () => {
     //   .fn()
     //   .mockImplementation(() => Promise.resolve(response))
     const getAddress = jest.fn().mockResolvedValue(response);
-    const address = await getAddress(postalCode, state, enpointKey);
+    // const address = await getAddress(postalCode, state, enpointKey);
+    await getAddress(postalCode, state, enpointKey);
     expect(getAddress).toHaveBeenCalled();
     expect(getAddress).toHaveBeenCalledWith(postalCode, state, enpointKey);
     expect(getAddress).toHaveReturned();
