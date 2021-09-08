@@ -48,7 +48,6 @@ describe("consultando CEPs usando API do ViaCEP", () => {
   it("tenta buscar o endereço a partir de um CEP inválido", async () => {
     const postalCode = "000";
     const address = await getAddress(postalCode, "SP", "VIACEP");
-    console.log(address);
     expect(address).not.toHaveProperty("cep");
     expect(address).toHaveProperty("errorMessage");
     expect(address.errorMessage).toContain("code 400");
