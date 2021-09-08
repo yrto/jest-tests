@@ -5,11 +5,13 @@
   "main": "index.js",
   "scripts": {
     "test": "jest --verbose --watchAll",
-    "test-coverage": "jest --verbose --watchAll --coverage"
+    "test-coverage": "jest --verbose --watchAll --coverage",
+    "prepare": "husky install"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "husky": "^7.0.2",
     "jest": "^27.0.6",
     "nodemon": "^2.0.12"
   },
